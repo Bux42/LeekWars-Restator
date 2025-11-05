@@ -1,142 +1,58 @@
 import { EntityStats } from "@/types/EntityStats";
+import { statsStyles } from "./Stats.styles";
+import Level from "../level/Level";
 
 export default function Stats({
   base,
   invested,
   bonus,
+  total,
   capital,
+  level,
+  setLevel,
 }: {
   base: EntityStats;
   invested: EntityStats;
   bonus: EntityStats;
+  total: EntityStats;
   capital: number;
+  level: number;
+  setLevel: (level: number) => void;
 }) {
   return (
-    <div style={{ marginTop: "20px", padding: "20px", color: "black" }}>
-      <h3 style={{ color: "white" }}>Entity Stats ({capital} capital)</h3>
-      <table
-        style={{
-          width: "100%",
-          borderCollapse: "collapse",
-          border: "1px solid #ccc",
-          backgroundColor: "#f9f9f9",
-        }}
-      >
-        <thead>
-          <tr style={{ backgroundColor: "#e0e0e0" }}>
-            <th
-              style={{
-                border: "1px solid #ccc",
-                padding: "8px",
-                textAlign: "left",
-              }}
-            >
-              Stat
-            </th>
-            <th
-              style={{
-                border: "1px solid #ccc",
-                padding: "8px",
-                textAlign: "center",
-              }}
-            >
-              Base
-            </th>
-            <th
-              style={{
-                border: "1px solid #ccc",
-                padding: "8px",
-                textAlign: "center",
-              }}
-            >
-              Invested
-            </th>
-            <th
-              style={{
-                border: "1px solid #ccc",
-                padding: "8px",
-                textAlign: "center",
-              }}
-            >
-              Bonus
-            </th>
-            <th
-              style={{
-                border: "1px solid #ccc",
-                padding: "8px",
-                textAlign: "center",
-                backgroundColor: "#d4edda",
-              }}
-            >
-              Total
-            </th>
+    <div style={statsStyles.container}>
+      <h3 style={statsStyles.title}>
+        <Level level={level} setLevel={setLevel} />
+        <span style={statsStyles.capitalBadge}>{capital} capital</span>
+      </h3>
+      <table style={statsStyles.table}>
+        <thead style={statsStyles.tableHeader}>
+          <tr style={statsStyles.headerRow}>
+            <th style={statsStyles.headerCell}>Stat</th>
+            <th style={statsStyles.headerCell}>Base</th>
+            <th style={statsStyles.headerCell}>Invested</th>
+            <th style={statsStyles.headerCell}>Bonus</th>
+            <th style={statsStyles.totalHeaderCell}>Total</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody style={statsStyles.tableBody}>
           {Object.keys(base).map((statKey) => {
             const key = statKey as keyof EntityStats;
-            const total = base[key] + invested[key] + bonus[key];
 
             return (
-              <tr key={statKey}>
-                <td
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: "8px",
-                    fontWeight: "bold",
-                    textTransform: "capitalize",
-                  }}
-                >
+              <tr key={statKey} style={statsStyles.bodyRow}>
+                <td style={statsStyles.statNameCell}>
                   <img
                     src={`/assets/images/stats/${key}.png`}
                     alt={key}
-                    style={{
-                      width: "16px",
-                      height: "16px",
-                      marginRight: "8px",
-                      verticalAlign: "middle",
-                    }}
+                    style={statsStyles.statIcon}
                   />
                   {key}
                 </td>
-                <td
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: "8px",
-                    textAlign: "center",
-                  }}
-                >
-                  {base[key]}
-                </td>
-                <td
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: "8px",
-                    textAlign: "center",
-                  }}
-                >
-                  {invested[key]}
-                </td>
-                <td
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: "8px",
-                    textAlign: "center",
-                  }}
-                >
-                  {bonus[key]}
-                </td>
-                <td
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: "8px",
-                    textAlign: "center",
-                    fontWeight: "bold",
-                    backgroundColor: "#d4edda",
-                  }}
-                >
-                  {total}
-                </td>
+                <td style={statsStyles.valueCell}>{base[key]}</td>
+                <td style={statsStyles.valueCell}>{invested[key]}</td>
+                <td style={statsStyles.valueCell}>{bonus[key]}</td>
+                <td style={statsStyles.totalCell}>{total[key]}</td>
               </tr>
             );
           })}

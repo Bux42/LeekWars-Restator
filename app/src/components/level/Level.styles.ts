@@ -6,61 +6,53 @@ export interface ILevelStyles {
   inputRow: CSSProperties;
   label: CSSProperties;
   input: CSSProperties;
-  rangeText: CSSProperties;
-  buttonsRow: CSSProperties;
-  buttonDown: (disabled: boolean) => CSSProperties;
-  buttonUp: (disabled: boolean) => CSSProperties;
 }
 
 export const levelStyles: ILevelStyles = {
   container: {
-    marginBottom: "20px",
-    padding: "15px",
-    border: "1px solid #ccc",
-    borderRadius: "5px",
+    marginBottom: "24px",
+    padding: "24px",
+    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    borderRadius: "16px",
+    boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.1)",
+    border: "1px solid rgba(255, 255, 255, 0.2)",
+    backdropFilter: "blur(10px)",
+    color: "white",
   },
   title: {
-    margin: "0 0 15px 0",
+    margin: "0 0 20px 0",
+    fontSize: "24px",
+    fontWeight: "700",
+    textAlign: "center" as const,
+    textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
+    letterSpacing: "0.5px",
   },
   inputRow: {
     display: "flex",
     alignItems: "center",
-    gap: "10px",
-    marginBottom: "10px",
+    justifyContent: "center",
+    gap: "16px",
+    marginBottom: "20px",
+    flexWrap: "wrap" as const,
   },
   label: {
-    fontWeight: "bold",
+    fontWeight: "600",
+    fontSize: "18px",
+    color: "rgba(255, 255, 255, 0.95)",
+    textShadow: "0 1px 2px rgba(0, 0, 0, 0.2)",
   },
   input: {
-    padding: "5px 10px",
-    border: "1px solid #ccc",
-    borderRadius: "3px",
-    width: "80px",
+    padding: "12px 16px",
+    border: "2px solid rgba(255, 255, 255, 0.3)",
+    borderRadius: "12px",
+    width: "100px",
     textAlign: "center" as const,
-    fontSize: "16px",
+    fontSize: "18px",
+    fontWeight: "600",
+    backgroundColor: "rgba(255, 255, 255, 0.95)",
+    color: "#333",
+    boxShadow: "inset 0 2px 4px rgba(0, 0, 0, 0.1)",
+    transition: "all 0.3s ease",
+    outline: "none",
   },
-  rangeText: {
-    color: "#666",
-    fontSize: "14px",
-  },
-  buttonsRow: {
-    display: "flex",
-    gap: "10px",
-  },
-  buttonDown: (disabled: boolean) => ({
-    padding: "5px 15px",
-    backgroundColor: disabled ? "#ccc" : "#f44336",
-    color: "white",
-    border: "none",
-    borderRadius: "3px",
-    cursor: disabled ? "not-allowed" : "pointer",
-  }),
-  buttonUp: (disabled: boolean) => ({
-    padding: "5px 15px",
-    backgroundColor: disabled ? "#ccc" : "#4CAF50",
-    color: "white",
-    border: "none",
-    borderRadius: "3px",
-    cursor: disabled ? "not-allowed" : "pointer",
-  }),
 };

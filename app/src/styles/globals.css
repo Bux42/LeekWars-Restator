@@ -1,11 +1,11 @@
 :root {
-  --background: #ffffff;
+  --background: #333333;
   --foreground: #171717;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #333333;
     --foreground: #ededed;
   }
 }
@@ -39,4 +39,30 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+/* Modern Level Component Styles */
+.level-input:focus {
+  border-color: rgba(255, 255, 255, 0.8) !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1),
+    0 0 0 3px rgba(255, 255, 255, 0.2) !important;
+  transform: scale(1.02);
+}
+
+.level-button:hover:not(:disabled) {
+  transform: translateY(-2px) !important;
+}
+
+.level-button:active:not(:disabled) {
+  transform: translateY(0) !important;
+}
+
+.level-button:disabled {
+  opacity: 0.7;
+}
+
+/* Smooth animations for all interactive elements */
+input[type="number"],
+button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }

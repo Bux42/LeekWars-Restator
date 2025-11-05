@@ -35,7 +35,11 @@ export default function Home() {
   // Example: Find a specific weapon by name
   const pistol = weapons.find((weapon) => weapon.name === "pistol");
 
-  const capital = (level - 1) * 5 + 50;
+  const capital =
+    50 +
+    5 * (level - 1) +
+    Math.floor(level / 100) * 45 +
+    Math.floor((level - 1) / 300) * 95;
 
   const baseStats: EntityStats = {
     life: 100 + (level - 1) * 3,
@@ -82,6 +86,23 @@ export default function Home() {
     mp: 0,
   };
 
+  const totalStats: EntityStats = {
+    life: baseStats.life + investedStats.life + bonusStats.life,
+    strength: baseStats.strength + investedStats.strength + bonusStats.strength,
+    wisdom: baseStats.wisdom + investedStats.wisdom + bonusStats.wisdom,
+    agility: baseStats.agility + investedStats.agility + bonusStats.agility,
+    resistance:
+      baseStats.resistance + investedStats.resistance + bonusStats.resistance,
+    science: baseStats.science + investedStats.science + bonusStats.science,
+    magic: baseStats.magic + investedStats.magic + bonusStats.magic,
+    frequency:
+      baseStats.frequency + investedStats.frequency + bonusStats.frequency,
+    cores: baseStats.cores + investedStats.cores + bonusStats.cores,
+    ram: baseStats.ram + investedStats.ram + bonusStats.ram,
+    tp: baseStats.tp + investedStats.tp + bonusStats.tp,
+    mp: baseStats.mp + investedStats.mp + bonusStats.mp,
+  };
+
   return (
     <>
       <Head>
@@ -94,12 +115,14 @@ export default function Home() {
         className={`${styles.page} ${geistSans.variable} ${geistMono.variable}`}
       >
         <main className={styles.main}>
-          <Level level={level} setLevel={setLevel} />
           <Stats
             base={baseStats}
             invested={investedStats}
             bonus={bonusStats}
+            total={totalStats}
             capital={capital}
+            level={level}
+            setLevel={setLevel}
           />
 
           <WeaponImage weaponName="gazor" />

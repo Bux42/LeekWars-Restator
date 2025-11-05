@@ -20,21 +20,8 @@ export default function Level({
     }
   };
 
-  const handleLevelUp = () => {
-    if (level < MAX_LEVEL) {
-      setLevel(level + 1);
-    }
-  };
-
-  const handleLevelDown = () => {
-    if (level > MIN_LEVEL) {
-      setLevel(level - 1);
-    }
-  };
-
   return (
     <div style={levelStyles.container}>
-      <h3 style={levelStyles.title}>Level Controls</h3>
       <div style={levelStyles.inputRow}>
         <label htmlFor="level-input" style={levelStyles.label}>
           Level:
@@ -47,26 +34,8 @@ export default function Level({
           value={level}
           onChange={handleLevelChange}
           style={levelStyles.input}
+          className="level-input"
         />
-        <span style={levelStyles.rangeText}>
-          ({MIN_LEVEL} - {MAX_LEVEL})
-        </span>
-      </div>
-      <div style={levelStyles.buttonsRow}>
-        <button
-          onClick={handleLevelDown}
-          disabled={level <= MIN_LEVEL}
-          style={levelStyles.buttonDown(level <= MIN_LEVEL)}
-        >
-          Level Down
-        </button>
-        <button
-          onClick={handleLevelUp}
-          disabled={level >= MAX_LEVEL}
-          style={levelStyles.buttonUp(level >= MAX_LEVEL)}
-        >
-          Level Up
-        </button>
       </div>
     </div>
   );
