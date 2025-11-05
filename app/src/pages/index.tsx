@@ -3,7 +3,11 @@ import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 import weaponNamesToImageUrls from "@/data/weapon_names_to_image_urls.json";
+import weaponsData from "@/data/weapons.json";
+import weaponIds from "@/data/weapon_ids.json";
 import WeaponImage from "@/components/weapons/WeaponImage";
+import { getWeaponImageUrlByName } from "@/components/weapons/WeaponUtils";
+import { Weapon } from "@/types/weapon";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,18 +20,16 @@ const geistMono = Geist_Mono({
 });
 
 export default function Home() {
-  // Function to get weapon image URL
-  const getWeaponImageUrl = (weaponName: string): string => {
-    return (
-      weaponNamesToImageUrls[
-        weaponName as keyof typeof weaponNamesToImageUrls
-      ] || ""
-    );
-  };
+  // Convert the weapons object to a typed array
+  const weapons: Weapon[] = Object.values(
+    weaponsData as Record<string, Weapon>
+  );
 
-  // Example: Get some weapon names
-  const weaponNames = Object.keys(weaponNamesToImageUrls);
-  const firstFiveWeapons = weaponNames.slice(0, 5);
+  // Example usage: Get first 5 weapons
+  const firstFiveWeapons = weapons.slice(0, 5);
+
+  // Example: Find a specific weapon by name
+  const pistol = weapons.find((weapon) => weapon.name === "pistol");
 
   return (
     <>
@@ -41,100 +43,39 @@ export default function Home() {
         className={`${styles.page} ${geistSans.variable} ${geistMono.variable}`}
       >
         <main className={styles.main}>
-          <Image
-            src="/assets/images/stats/life.png"
-            alt="Life Icon"
-            width={32}
-            height={32}
-            priority
-          />
-          <Image
-            src="/assets/images/stats/agility.png"
-            alt="Agility Icon"
-            width={32}
-            height={32}
-            priority
-          />
-
           <WeaponImage weaponName="gazor" />
 
-          {/* Display some weapons from the JSON data */}
-          <div style={{ marginTop: "20px" }}>
-            <h3>Sample Weapons:</h3>
-            {firstFiveWeapons.map((weaponName) => (
-              <div
-                key={weaponName}
-                style={{
-                  margin: "10px 0",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                }}
-              >
-                <Image
-                  src={getWeaponImageUrl(weaponName)}
-                  alt={weaponName}
-                  width={32}
-                  height={32}
-                />
-                <span>{weaponName}</span>
+          {/* Display weapons array info */}
+          <div
+            style={{
+              marginTop: "20px",
+              padding: "20px",
+              border: "1px solid #ccc",
+            }}
+          >
+            <h3>Weapons Data:</h3>
+            <p>Total weapons: {weapons.length}</p>
+            {pistol && (
+              <div>
+                <h4>Found Pistol:</h4>
+                <p>ID: {pistol.id}</p>
+                <p>Name: {pistol.name}</p>
+                <p>Level: {pistol.level}</p>
+                <p>Cost: {pistol.cost}</p>
+                <p>Max Range: {pistol.max_range}</p>
+                <p>Effects: {pistol.effects.length}</p>
+                <p>Passive Effects: {pistol.passive_effects.length}</p>
               </div>
-            ))}
-          </div>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js logo"
-            width={100}
-            height={20}
-            priority
-          />
-          <div className={styles.intro}>
-            <h1>To get started, edit the index.tsx file.</h1>
-            <p>
-              Looking for a starting point or more instructions? Head over to{" "}
-              <a
-                href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Templates
-              </a>{" "}
-              or the{" "}
-              <a
-                href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Learning
-              </a>{" "}
-              center.
-            </p>
-          </div>
-          <div className={styles.ctas}>
-            <a
-              className={styles.primary}
-              href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Image
-                className={styles.logo}
-                src="/vercel.svg"
-                alt="Vercel logomark"
-                width={16}
-                height={16}
-              />
-              Deploy Now
-            </a>
-            <a
-              className={styles.secondary}
-              href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Documentation
-            </a>
+            )}
+
+            <h4>First 5 Weapons:</h4>
+            <ul>
+              {firstFiveWeapons.map((weapon) => (
+                <li key={weapon.id}>
+                  {weapon.name} (ID: {weapon.id}, Level: {weapon.level})
+                </li>
+              ))}
+            </ul>
           </div>
         </main>
       </div>
