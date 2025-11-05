@@ -32,7 +32,6 @@ export const levelStyles: ILevelStyles = {
     alignItems: "center",
     justifyContent: "center",
     gap: "16px",
-    marginBottom: "20px",
     flexWrap: "wrap" as const,
   },
   label: {

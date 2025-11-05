@@ -7,7 +7,7 @@ import { getWeaponImageUrlByName } from "@/components/weapons/WeaponUtils";
 import { Weapon } from "@/types/Weapon";
 import { EntityStats } from "@/types/EntityStats";
 import Stats from "@/components/stats/Stats";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Level from "@/components/level/Level";
 
 const geistSans = Geist({
@@ -26,6 +26,7 @@ const getWeapons: () => Weapon[] = () => {
 
 export default function Home() {
   const [level, setLevel] = useState<number>(1);
+  const [investedCapital, setInvestedCapital] = useState<number>(0);
   // Convert the weapons object to a typed array
   const weapons: Weapon[] = getWeapons();
 
@@ -35,11 +36,15 @@ export default function Home() {
   // Example: Find a specific weapon by name
   const pistol = weapons.find((weapon) => weapon.name === "pistol");
 
-  const capital =
-    50 +
-    5 * (level - 1) +
-    Math.floor(level / 100) * 45 +
-    Math.floor((level - 1) / 300) * 95;
+  const capital = useMemo(() => {
+    return (
+      50 +
+      5 * (level - 1) +
+      Math.floor(level / 100) * 45 +
+      Math.floor((level - 1) / 300) * 95 -
+      investedCapital
+    );
+  }, [level, investedCapital]);
 
   const baseStats: EntityStats = {
     life: 100 + (level - 1) * 3,
