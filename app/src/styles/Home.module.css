@@ -19,6 +19,7 @@
 
 .main {
   display: flex;
+  gap: 40px;
   min-height: 100vh;
   width: 100%;
   max-width: 800px;
@@ -108,6 +109,8 @@ a.secondary {
 @media (max-width: 600px) {
   .main {
     padding: 48px 24px;
+    display: flex;
+    gap: 32px;
   }
 
   .intro {
@@ -127,8 +130,8 @@ a.secondary {
   }
 
   .page {
-    --background: #000;
-    --foreground: #000;
+    --background: #111;
+    --foreground: #111;
 
     --text-primary: #ededed;
     --text-secondary: #999;

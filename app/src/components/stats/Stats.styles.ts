@@ -23,6 +23,7 @@ export interface IStatsStyles {
 export const statsStyles: IStatsStyles = {
   container: {
     marginTop: "24px",
+    width: "100%",
     padding: "0",
     background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
     borderRadius: "20px",

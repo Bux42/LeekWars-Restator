@@ -9,6 +9,7 @@ import { EntityStats } from "@/types/EntityStats";
 import Stats from "@/components/stats/Stats";
 import { useMemo, useState } from "react";
 import { EMPTY_STATS } from "@/constants/Stats.constants";
+import EquibableComponents from "@/components/equipable-components/EquipableComponents";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -125,6 +126,7 @@ export default function Home() {
             setLevel={setLevel}
             onInvestedCapitalChange={onInvestedCapitalChange}
           />
+          <EquibableComponents />
 
           <WeaponImage weaponName="gazor" />
 
