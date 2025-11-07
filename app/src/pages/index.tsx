@@ -15,7 +15,7 @@ import { Chip } from "@/types/Chip";
 import { Castable } from "@/types/Castable";
 import CastableCard from "@/components/castables/castable-card/CastableCard";
 import { exportBuild } from "@/lib/export/ExportHelpers";
-import { indexStyles } from "./index.styles";
+import { indexStyles } from "../styles/home.styles";
 
 const weapons = Object.values(weaponsData as Record<string, Weapon>).map(
   (w) => ({

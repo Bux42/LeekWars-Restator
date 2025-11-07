@@ -16,6 +16,7 @@ export const chipToCastable = (chip: Chip): Castable => {
     min_range: chip.min_range,
     name: chip.name,
     template: chip.template,
+    type: "chip",
   };
 };
 
@@ -33,5 +34,6 @@ export const weaponToCastable = (weapon: Weapon): Castable => {
     min_range: weapon.min_range,
     name: weapon.name,
     template: weapon.template,
+    type: "weapon",
   };
 };
