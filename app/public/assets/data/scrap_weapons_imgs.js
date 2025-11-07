@@ -9,7 +9,7 @@ chip_name_to_image = {};
 curlScript = "";
 
 // divs[0].childNodes[0].childNodes[0].href
-for (let i = 3; i < divs.length; i += 2) {
+for (let i = 1; i < divs.length; i += 2) {
   imgUrl = divs[i].childNodes[0].childNodes[0].href;
 
   // curl script to download image in current directory
@@ -30,5 +30,5 @@ for (let i = 3; i < divs.length; i += 2) {
 console.log("\n\nCurl script to download all images:\n\n" + curlScript);
 
 // // final object to copy-paste
-// console.log("\n\nFinal object to copy-paste:\n\n");
-// console.log(JSON.stringify(chip_name_to_image, null, 2));
+console.log("\n\nFinal object to copy-paste:\n\n");
+console.log(JSON.stringify(chip_name_to_image, null, 2));
