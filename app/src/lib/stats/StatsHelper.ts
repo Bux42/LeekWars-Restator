@@ -1,4 +1,5 @@
 import { EntityStats } from "@/types/EntityStats";
+import { EquipableComponent } from "@/types/EquipableComponent";
 
 const thresholdStats: Array<keyof EntityStats> = [
   "strength",
@@ -8,6 +9,35 @@ const thresholdStats: Array<keyof EntityStats> = [
   "science",
   "magic",
 ];
+
+export const getBonusStatsFromComponents = (
+  equippedComponents: EquipableComponent[]
+): EntityStats => {
+  const bonusStats: EntityStats = {
+    life: 0,
+    strength: 0,
+    wisdom: 0,
+    agility: 0,
+    resistance: 0,
+    science: 0,
+    magic: 0,
+    frequency: 0,
+    cores: 0,
+    ram: 0,
+    tp: 0,
+    mp: 0,
+  };
+
+  equippedComponents.forEach((component) => {
+    component.stats.forEach(([statName, statValue]) => {
+      if (statName in bonusStats) {
+        bonusStats[statName as keyof EntityStats] += statValue;
+      }
+    });
+  });
+
+  return bonusStats;
+};
 
 export const updateStatsOnAddCapital = (
   statKey: keyof EntityStats,

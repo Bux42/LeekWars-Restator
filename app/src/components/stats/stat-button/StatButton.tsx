@@ -1,3 +1,5 @@
+import { statButtonStyles } from "./StatButton.styles";
+
 export default function StatButton({
   name,
   amount,
@@ -17,7 +19,7 @@ export default function StatButton({
     <img
       src={imgSrc}
       alt={name}
-      style={{ cursor: disabled ? "not-allowed" : "pointer", marginLeft: 5 }}
+      style={statButtonStyles.img(disabled)}
       onClick={() => {
         if (!disabled) {
           onClick(name === "add" ? amount : -amount);

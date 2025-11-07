@@ -1,15 +1,32 @@
 import Head from "next/head";
 import { Geist, Geist_Mono } from "next/font/google";
-import styles from "@/styles/Home.module.css";
-import weaponsData from "@/data/weapons.json";
-import WeaponImage from "@/components/weapons/WeaponImage";
-import { getWeaponImageUrlByName } from "@/components/weapons/WeaponUtils";
-import { Weapon } from "@/types/Weapon";
 import { EntityStats } from "@/types/EntityStats";
 import Stats from "@/components/stats/Stats";
 import { useMemo, useState } from "react";
 import { EMPTY_STATS } from "@/constants/Stats.constants";
-import EquibableComponents from "@/components/equipable-components/EquipableComponents";
+import CastableList from "@/components/castables/CastableList";
+import { EquipableComponent } from "@/types/EquipableComponent";
+import { getBonusStatsFromComponents } from "@/lib/stats/StatsHelper";
+import EquipableComponents from "@/components/equipable-components/EquipableComponents";
+import weaponsData from "@/data/weapons.json";
+import chipsData from "@/data/chips.json";
+import { Weapon } from "@/types/Weapon";
+import { Chip } from "@/types/Chip";
+import { Castable } from "@/types/Castable";
+import CastableCard from "@/components/castables/castable-card/CastableCard";
+import { exportBuild } from "@/lib/export/ExportHelpers";
+import { indexStyles } from "./index.styles";
+
+const weapons = Object.values(weaponsData as Record<string, Weapon>).map(
+  (w) => ({
+    ...w,
+    type: "weapon" as const,
+  })
+);
+const chips = Object.values(chipsData as Record<string, Chip>).map((c) => ({
+  ...c,
+  type: "chip" as const,
+}));
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,23 +38,18 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const getWeapons: () => Weapon[] = () => {
-  return Object.values(weaponsData as Record<string, Weapon>);
-};
-
 export default function Home() {
   const [level, setLevel] = useState<number>(1);
   const [investedStats, setInvestedStats] = useState<EntityStats>(EMPTY_STATS);
   const [investedCapital, setInvestedCapital] = useState<number>(0);
 
-  // Convert the weapons object to a typed array
-  const weapons: Weapon[] = getWeapons();
+  const [bonusStats, setBonusStats] = useState<EntityStats>(EMPTY_STATS);
 
-  // Example usage: Get first 5 weapons
-  const firstFiveWeapons = weapons.slice(0, 5);
+  const [equippedComponents, setEquippedComponents] = useState<
+    EquipableComponent[]
+  >([]);
 
-  // Example: Find a specific weapon by name
-  const pistol = weapons.find((weapon) => weapon.name === "pistol");
+  const [selectedCastables, setSelectedCastables] = useState<Castable[]>([]);
 
   const totalCapital = useMemo(() => {
     return (
@@ -48,52 +60,37 @@ export default function Home() {
     );
   }, [level]);
 
-  const baseStats: EntityStats = {
-    life: 100 + (level - 1) * 3,
-    strength: 0,
-    wisdom: 0,
-    agility: 0,
-    resistance: 0,
-    science: 0,
-    magic: 0,
-    frequency: 100,
-    cores: 1,
-    ram: 6,
-    tp: 10,
-    mp: 3,
-  };
+  const baseStats: EntityStats = useMemo(() => {
+    return {
+      ...EMPTY_STATS,
+      life: 100 + (level - 1) * 3,
+      frequency: 100,
+      cores: 1,
+      ram: 6,
+      tp: 10,
+      mp: 3,
+    };
+  }, [level]);
 
-  const bonusStats: EntityStats = {
-    life: 0,
-    strength: 0,
-    wisdom: 100,
-    agility: 0,
-    resistance: 0,
-    science: 0,
-    magic: 0,
-    frequency: 0,
-    cores: 0,
-    ram: 0,
-    tp: 0,
-    mp: 0,
-  };
-
-  const totalStats: EntityStats = {
-    life: baseStats.life + investedStats.life + bonusStats.life,
-    strength: baseStats.strength + investedStats.strength + bonusStats.strength,
-    wisdom: baseStats.wisdom + investedStats.wisdom + bonusStats.wisdom,
-    agility: baseStats.agility + investedStats.agility + bonusStats.agility,
-    resistance:
-      baseStats.resistance + investedStats.resistance + bonusStats.resistance,
-    science: baseStats.science + investedStats.science + bonusStats.science,
-    magic: baseStats.magic + investedStats.magic + bonusStats.magic,
-    frequency:
-      baseStats.frequency + investedStats.frequency + bonusStats.frequency,
-    cores: baseStats.cores + investedStats.cores + bonusStats.cores,
-    ram: baseStats.ram + investedStats.ram + bonusStats.ram,
-    tp: baseStats.tp + investedStats.tp + bonusStats.tp,
-    mp: baseStats.mp + investedStats.mp + bonusStats.mp,
-  };
+  const totalStats: EntityStats = useMemo(() => {
+    return {
+      life: baseStats.life + investedStats.life + bonusStats.life,
+      strength:
+        baseStats.strength + investedStats.strength + bonusStats.strength,
+      wisdom: baseStats.wisdom + investedStats.wisdom + bonusStats.wisdom,
+      agility: baseStats.agility + investedStats.agility + bonusStats.agility,
+      resistance:
+        baseStats.resistance + investedStats.resistance + bonusStats.resistance,
+      science: baseStats.science + investedStats.science + bonusStats.science,
+      magic: baseStats.magic + investedStats.magic + bonusStats.magic,
+      frequency:
+        baseStats.frequency + investedStats.frequency + bonusStats.frequency,
+      cores: baseStats.cores + investedStats.cores + bonusStats.cores,
+      ram: baseStats.ram + investedStats.ram + bonusStats.ram,
+      tp: baseStats.tp + investedStats.tp + bonusStats.tp,
+      mp: baseStats.mp + investedStats.mp + bonusStats.mp,
+    };
+  }, [baseStats, investedStats, bonusStats]);
 
   const onInvestedCapitalChange = (
     newInvested: EntityStats,
@@ -101,6 +98,34 @@ export default function Home() {
   ) => {
     setInvestedCapital(investedCapital);
     setInvestedStats(newInvested);
+  };
+
+  const onEquipComponent = (component: EquipableComponent) => {
+    const newEquippedComponents = [...equippedComponents, component];
+    const newBonusStats = getBonusStatsFromComponents(newEquippedComponents);
+
+    setBonusStats(newBonusStats);
+    setEquippedComponents(newEquippedComponents);
+  };
+
+  const onUnequipComponent = (componentId: number) => {
+    const newEquippedComponents = equippedComponents.filter(
+      (component) => component.id !== componentId
+    );
+    const newBonusStats = getBonusStatsFromComponents(newEquippedComponents);
+
+    setBonusStats(newBonusStats);
+    setEquippedComponents(newEquippedComponents);
+  };
+
+  const onSelectCastable = (castable: Castable) => {
+    setSelectedCastables((prevSelected) => [...prevSelected, castable]);
+  };
+
+  const onDeselectCastable = (castableName: string) => {
+    setSelectedCastables((prevSelected) =>
+      prevSelected.filter((s) => s.name !== castableName)
+    );
   };
 
   return (
@@ -112,63 +137,108 @@ export default function Home() {
         <link rel="icon" href="/favicon.png" />
       </Head>
       <div
-        className={`${styles.page} ${geistSans.variable} ${geistMono.variable}`}
+        style={indexStyles.container}
+        className={`${geistSans.variable} ${geistMono.variable}`}
       >
-        <main className={styles.main}>
-          <Stats
-            baseStats={baseStats}
-            investedStats={investedStats}
-            bonusStats={bonusStats}
-            totalStats={totalStats}
-            totalCapital={totalCapital}
-            investedCapital={investedCapital}
-            level={level}
-            setLevel={setLevel}
-            onInvestedCapitalChange={onInvestedCapitalChange}
+        <a
+          style={indexStyles.githubLink}
+          target="_blank"
+          href="https://github.com/Bux42/LeekWars-Restator"
+        >
+          <img
+            alt="github"
+            height={32}
+            width={32}
+            src="https://cdn3.iconfinder.com/data/icons/social-media-2169/24/social_media_social_media_logo_github-512.png"
           />
-          <EquibableComponents />
-
-          <WeaponImage weaponName="gazor" />
-
-          {/* Display weapons array info */}
-          <div
-            style={{
-              marginTop: "20px",
-              padding: "20px",
-              border: "1px solid #ccc",
-            }}
-          >
-            <h3>Weapons Data:</h3>
-            <p>Total weapons: {weapons.length}</p>
-            {pistol && (
-              <div>
-                <h4>Found Pistol:</h4>
-                <p>ID: {pistol.id}</p>
-                <p>Name: {pistol.name}</p>
-                <p>
-                  <img
-                    src={getWeaponImageUrlByName(pistol.name)}
-                    alt={pistol.name}
-                  />
-                </p>
-                <p>Level: {pistol.level}</p>
-                <p>Cost: {pistol.cost}</p>
-                <p>Max Range: {pistol.max_range}</p>
-                <p>Effects: {pistol.effects.length}</p>
-                <p>Passive Effects: {pistol.passive_effects.length}</p>
-              </div>
-            )}
-
-            <h4>First 5 Weapons:</h4>
-            <ul>
-              {firstFiveWeapons.map((weapon) => (
-                <li key={weapon.id}>
-                  {weapon.name} (ID: {weapon.id}, Level: {weapon.level})
-                </li>
-              ))}
-            </ul>
+        </a>
+        <img
+          src="/assets/images/icons/save.png"
+          alt="export"
+          style={indexStyles.exportLink}
+          onClick={() => exportBuild(totalStats, selectedCastables, level)}
+        />
+        <div style={indexStyles.topContainer} className="topContainers">
+          <div style={indexStyles.leftSideContainer} className="leftSide">
+            <h2>Characteristics</h2>
+            <Stats
+              baseStats={baseStats}
+              investedStats={investedStats}
+              bonusStats={bonusStats}
+              totalStats={totalStats}
+              totalCapital={totalCapital}
+              investedCapital={investedCapital}
+              level={level}
+              setLevel={setLevel}
+              onInvestedCapitalChange={onInvestedCapitalChange}
+            />
           </div>
-        </main>
+          <div className="rightSide" style={indexStyles.rightSideContainer}>
+            <div
+              className="componentsChipsWeaponsContainer"
+              style={indexStyles.componentsChipsWeaponsContainer}
+            >
+              <div
+                style={indexStyles.rightSideItemContainer}
+                className="componentsContainer"
+              >
+                <h2>Components ({equippedComponents.length} equipped) </h2>
+                <EquipableComponents
+                  equippedComponents={equippedComponents}
+                  onEquipComponent={onEquipComponent}
+                  onUnequipComponent={onUnequipComponent}
+                />
+              </div>
+              <div
+                style={indexStyles.rightSideItemContainer}
+                className="weaponsContainer"
+              >
+                <h2>Weapons</h2>
+                <CastableList
+                  totalStats={totalStats}
+                  castables={weapons}
+                  onDeselectCastable={onDeselectCastable}
+                  onSelectCastable={onSelectCastable}
+                  selectedCastables={selectedCastables}
+                />
+              </div>
+              <div
+                style={indexStyles.rightSideItemContainer}
+                className="chipsContainer"
+              >
+                <h2>Chips</h2>
+                <CastableList
+                  totalStats={totalStats}
+                  castables={chips}
+                  onDeselectCastable={onDeselectCastable}
+                  onSelectCastable={onSelectCastable}
+                  selectedCastables={selectedCastables}
+                />
+              </div>
+            </div>
+            <div
+              style={indexStyles.rightSideItemContainer}
+              className="selectedCastables"
+            >
+              <h2>Equipped Weapons / Chips ({selectedCastables.length})</h2>
+              <div
+                style={indexStyles.selectedCastablesContainer}
+                className="selectedCastablesContainer"
+              >
+                {selectedCastables.map((castable) => (
+                  <CastableCard
+                    key={castable.id}
+                    castable={castable}
+                    onDeselectCastable={onDeselectCastable}
+                    onSelectCastable={onSelectCastable}
+                    totalStats={totalStats}
+                    selected
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );

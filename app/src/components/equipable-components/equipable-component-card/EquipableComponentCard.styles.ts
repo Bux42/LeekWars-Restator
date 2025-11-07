@@ -4,19 +4,14 @@ export interface IEquipableComponentCardStyles {
   name: React.CSSProperties;
   info: React.CSSProperties;
   stats: React.CSSProperties;
-  equippedOverlay: React.CSSProperties;
 }
+
 export const equipableComponentCardStyles: IEquipableComponentCardStyles = {
   container: (equipped: boolean) => ({
     border: "1px solid #ccc",
     borderRadius: "8px",
     padding: "10px",
     margin: "10px",
-    width: "200px",
-    // ...(equipped && {
-    //   borderColor: "green",
-    //   boxShadow: "0 0 10px rgba(0, 128, 0, 0.5)",
-    // }),
     textAlign: "center",
     position: "relative",
     cursor: "pointer",
@@ -45,16 +40,6 @@ export const equipableComponentCardStyles: IEquipableComponentCardStyles = {
     display: "flex",
     flexWrap: "wrap" as const,
     gap: "16px",
-  },
-  equippedOverlay: {
-    position: "absolute",
-    top: "0",
-    left: "0",
-    width: "100%",
-    height: "100%",
-    backgroundColor: "rgba(0, 128, 0, 0.2)",
-    borderRadius: "8px",
-    pointerEvents: "none",
   },
 };
 

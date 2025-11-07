@@ -4,25 +4,21 @@ export interface IStatsStyles {
   container: CSSProperties;
   title: CSSProperties;
   table: CSSProperties;
-  tableHeader: CSSProperties;
   headerRow: CSSProperties;
   headerCell: CSSProperties;
   totalHeaderCell: CSSProperties;
-  tableBody: CSSProperties;
   bodyRow: CSSProperties;
   statNameCell: CSSProperties;
   statIcon: CSSProperties;
   investedCell: CSSProperties;
   investedValue: (value: number) => CSSProperties;
   valueCell: CSSProperties;
-  inputCell: CSSProperties;
   totalCell: CSSProperties;
   capitalBadge: CSSProperties;
 }
 
 export const statsStyles: IStatsStyles = {
   container: {
-    marginTop: "24px",
     width: "100%",
     padding: "0",
     background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
@@ -66,7 +62,6 @@ export const statsStyles: IStatsStyles = {
     borderRadius: "0 0 20px 20px",
     overflow: "hidden",
   },
-  tableHeader: {},
   headerRow: {
     background: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
     boxShadow: "0 2px 8px rgba(79, 172, 254, 0.3)",
@@ -94,7 +89,6 @@ export const statsStyles: IStatsStyles = {
     background: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
     position: "relative" as const,
   },
-  tableBody: {},
   bodyRow: {
     transition: "all 0.3s ease",
     borderBottom: "1px solid rgba(0, 0, 0, 0.05)",
@@ -151,17 +145,6 @@ export const statsStyles: IStatsStyles = {
     fontWeight: value > 0 ? "700" : "600",
     width: "40px",
   }),
-  inputCell: {
-    textAlign: "center" as const,
-    fontSize: "16px",
-    fontWeight: "600",
-    color: "#2c3e50",
-    backgroundColor: "rgba(255, 255, 255, 0.7)",
-    border: "none",
-    borderRight: "1px solid rgba(0, 0, 0, 0.05)",
-    transition: "all 0.3s ease",
-    width: "80px",
-  },
   totalCell: {
     padding: "16px 12px",
     textAlign: "center" as const,

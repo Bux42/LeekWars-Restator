@@ -61,7 +61,7 @@ export default function Stats({
         </span>
       </h3>
       <table style={statsStyles.table}>
-        <thead style={statsStyles.tableHeader}>
+        <thead>
           <tr style={statsStyles.headerRow}>
             <th style={statsStyles.headerCell}>Stat</th>
             <th style={statsStyles.headerCell}>Base</th>
@@ -70,7 +70,7 @@ export default function Stats({
             <th style={statsStyles.totalHeaderCell}>Total</th>
           </tr>
         </thead>
-        <tbody style={statsStyles.tableBody}>
+        <tbody>
           {Object.keys(baseStats).map((statKey) => {
             const key = statKey as keyof EntityStats;
 

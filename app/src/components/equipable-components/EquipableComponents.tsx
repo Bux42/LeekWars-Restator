@@ -3,6 +3,8 @@ import { equipableComponentsStyles } from "./EquipableComponents.styles";
 import EquipableComponentCard from "./equipable-component-card/EquipableComponentCard";
 import { EquipableComponent } from "@/types/EquipableComponent";
 import { useState } from "react";
+import { EntityStats } from "@/types/EntityStats";
+import { getBonusStatsFromComponents } from "@/lib/stats/StatsHelper";
 
 const getComponents: () => EquipableComponent[] = () => {
   return Object.values(
@@ -26,19 +28,21 @@ const componentBonuses = [
   "mp",
 ];
 
-export default function EquipableComponents() {
-  const [equippedComponents, setEquippedComponents] = useState<
-    EquipableComponent[]
-  >([]);
-
-  const onEquipComponent = (component: EquipableComponent) => {
-    setEquippedComponents((prev) => [...prev, component]);
+export default function EquipableComponents({
+  equippedComponents,
+  onEquipComponent,
+  onUnequipComponent,
+}: {
+  equippedComponents: EquipableComponent[];
+  onEquipComponent: (component: EquipableComponent) => void;
+  onUnequipComponent: (componentId: number) => void;
+}) {
+  const onEquipComponentClicked = (component: EquipableComponent) => {
+    onEquipComponent(component);
   };
 
-  const onUnequipComponent = (componentId: number) => {
-    setEquippedComponents((prev) =>
-      prev.filter((component) => component.id !== componentId)
-    );
+  const onUnequipComponentClicked = (componentId: number) => {
+    onUnequipComponent(componentId);
   };
 
   // sort components to show equipped ones first
@@ -52,9 +56,6 @@ export default function EquipableComponents() {
 
   return (
     <div style={equipableComponentsStyles.container}>
-      <h2 style={equipableComponentsStyles.title}>
-        Components ({equippedComponents.length} equipped)
-      </h2>
       <div
         style={equipableComponentsStyles.gridContainer}
         className="components-grid-scrollable"
@@ -64,8 +65,8 @@ export default function EquipableComponents() {
             key={component.id}
             component={component}
             equipped={equippedComponents.some((c) => c.id === component.id)}
-            equip={() => onEquipComponent(component)}
-            unequip={() => onUnequipComponent(component.id)}
+            equip={() => onEquipComponentClicked(component)}
+            unequip={() => onUnequipComponentClicked(component.id)}
           />
         ))}
       </div>
