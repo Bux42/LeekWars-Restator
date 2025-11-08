@@ -148,11 +148,19 @@ export default function Home() {
       <Head>
         <title>Restator Remastered</title>
         <meta
+          property="og:image"
+          content="https://leek-wars-restator.vercel.app/assets/images/restator.png"
+        ></meta>
+        <meta
           name="description"
           content="A tool for theory crafting Leek Wars builds"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
+        <meta
+          property="og:url"
+          content="https://leek-wars-restator.vercel.app/"
+        ></meta>
       </Head>
       <div
         style={indexStyles.container}
