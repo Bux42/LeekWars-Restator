@@ -12,7 +12,7 @@ export const castableListStyles: ICastableListStyles = {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
     gap: "10px",
-    maxHeight: "40vh",
+    maxHeight: "50vh",
     overflowY: "auto",
     border: "1px solid rgba(255, 255, 255, 0.2)",
     padding: "15px",
