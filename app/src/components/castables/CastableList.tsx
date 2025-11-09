@@ -1,12 +1,7 @@
-import { Weapon } from "@/types/Weapon";
 import { EntityStats } from "@/types/EntityStats";
 import CastableCard from "./castable-card/CastableCard";
-import { useState } from "react";
 import { castableListStyles } from "./CastableList.styles";
-import { Castable, CastableType } from "@/types/Castable";
-
-// const weapons = Object.values(weaponsData as Record<string, Weapon>);
-// const chips = Object.values(chipsData as Record<string, Chip>);
+import { Castable } from "@/types/Castable";
 
 export default function CastableList({
   totalStats,
@@ -22,7 +17,10 @@ export default function CastableList({
   onDeselectCastable: (castableName: string) => void;
 }) {
   return (
-    <div style={{ width: "100%" }} className="components-grid-scrollable">
+    <div
+      style={castableListStyles.container}
+      className="components-grid-scrollable"
+    >
       <div style={castableListStyles.gridContainer}>
         {castables.map((castable: Castable) => (
           <CastableCard

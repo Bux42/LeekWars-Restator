@@ -1,8 +1,12 @@
 export interface ICastableListStyles {
+  container: React.CSSProperties;
   gridContainer: React.CSSProperties;
 }
 
 export const castableListStyles: ICastableListStyles = {
+  container: {
+    width: "100%",
+  },
   gridContainer: {
     width: "100%",
     display: "grid",
