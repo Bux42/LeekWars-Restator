@@ -91,18 +91,30 @@ export default function Stats({
                     name="minus"
                     disabled={false}
                     onClick={() => onRemoveCapital(key, 1)}
+                    statKey={key}
+                    alreadyInvested={
+                      investedStats[statKey as keyof EntityStats]
+                    }
                   />
                   <StatButton
                     amount={10}
                     name="minus"
                     disabled={false}
                     onClick={() => onRemoveCapital(key, 10)}
+                    statKey={key}
+                    alreadyInvested={
+                      investedStats[statKey as keyof EntityStats]
+                    }
                   />
                   <StatButton
                     amount={100}
                     name="minus"
                     disabled={false}
                     onClick={() => onRemoveCapital(key, 100)}
+                    statKey={key}
+                    alreadyInvested={
+                      investedStats[statKey as keyof EntityStats]
+                    }
                   />
                   <div style={statsStyles.investedValue(investedStats[key])}>
                     {investedStats[key]}
@@ -112,18 +124,30 @@ export default function Stats({
                     name="add"
                     disabled={false}
                     onClick={() => onAddCapital(key, 1)}
+                    statKey={key}
+                    alreadyInvested={
+                      investedStats[statKey as keyof EntityStats]
+                    }
                   />
                   <StatButton
                     amount={10}
                     name="add"
                     disabled={false}
                     onClick={() => onAddCapital(key, 10)}
+                    statKey={key}
+                    alreadyInvested={
+                      investedStats[statKey as keyof EntityStats]
+                    }
                   />
                   <StatButton
                     amount={100}
                     name="add"
                     disabled={false}
                     onClick={() => onAddCapital(key, 100)}
+                    statKey={key}
+                    alreadyInvested={
+                      investedStats[statKey as keyof EntityStats]
+                    }
                   />
                 </td>
                 <td style={statsStyles.valueCell}>{bonusStats[key]}</td>

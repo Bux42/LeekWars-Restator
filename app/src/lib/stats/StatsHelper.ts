@@ -39,6 +39,105 @@ export const getBonusStatsFromComponents = (
   return bonusStats;
 };
 
+export const calculateCapitalCostAndStatsIncrease = (
+  statKey: keyof EntityStats,
+  currentStatValue: number,
+  targetStatValue: number
+): { totalCost: number; totalIncrease: number } => {
+  let totalCost = 0;
+  let totalIncrease = 0;
+  let tempStatValue = currentStatValue;
+
+  while (tempStatValue < targetStatValue) {
+    // strength, wisdom, resistance, agility, science, magic
+    if (thresholdStats.includes(statKey)) {
+      if (tempStatValue < 200) {
+        tempStatValue += 2;
+        totalCost += 1;
+        totalIncrease += 2;
+      } else if (tempStatValue < 400) {
+        tempStatValue += 1;
+        totalCost += 1;
+        totalIncrease += 1;
+      } else if (tempStatValue < 600) {
+        tempStatValue += 1;
+        totalCost += 2;
+        totalIncrease += 1;
+      } else {
+        tempStatValue += 1;
+        totalCost += 3;
+        totalIncrease += 1;
+      }
+    }
+    // life
+    else if (statKey == "life") {
+      if (tempStatValue < 1000) {
+        tempStatValue += 4;
+        totalCost += 1;
+        totalIncrease += 4;
+      } else if (tempStatValue < 2000) {
+        tempStatValue += 3;
+        totalCost += 1;
+        totalIncrease += 3;
+      } else {
+        tempStatValue += 2;
+        totalCost += 1;
+        totalIncrease += 2;
+      }
+    }
+    // frequency
+    else if (statKey == "frequency") {
+      tempStatValue += 1;
+      totalCost += 1;
+      totalIncrease += 1;
+    } else if (statKey == "cores" || statKey == "ram") {
+      tempStatValue += 1;
+      if (tempStatValue == 1) {
+        totalCost += 20;
+      } else {
+        let cost = (tempStatValue + 1) * 10;
+
+        if (cost > 100) {
+          cost = 100;
+        }
+        totalCost += cost;
+      }
+      totalIncrease += 1;
+    } else if (statKey == "tp") {
+      tempStatValue += 1;
+      if (tempStatValue == 1) {
+        totalCost += 30;
+      } else {
+        let cost = 30 + (tempStatValue - 1) * 5;
+
+        if (cost > 100) {
+          cost = 100;
+        }
+        totalCost += cost;
+      }
+      totalIncrease += 1;
+    } else if (statKey == "mp") {
+      tempStatValue += 1;
+      if (tempStatValue == 1) {
+        totalCost += 20;
+      } else {
+        let cost = 20 + (tempStatValue - 1) * 20;
+
+        if (cost > 180) {
+          cost = 180;
+        }
+        totalCost += cost;
+      }
+      totalIncrease += 1;
+    }
+  }
+
+  return {
+    totalCost,
+    totalIncrease,
+  };
+};
+
 export const updateStatsOnAddCapital = (
   statKey: keyof EntityStats,
   amount: number,
@@ -49,82 +148,14 @@ export const updateStatsOnAddCapital = (
   let usedCapital = 0;
 
   for (let i = 0; i < amount; i++) {
-    // strength, wisdom, resistance, agility, science, magic
-    if (thresholdStats.includes(statKey)) {
-      if (newInvestedStats[statKey] < 200) {
-        newInvestedStats[statKey] += 2;
-        usedCapital++;
-      } else if (newInvestedStats[statKey] < 400) {
-        newInvestedStats[statKey] += 1;
-        usedCapital++;
-      } else if (newInvestedStats[statKey] < 600) {
-        newInvestedStats[statKey] += 1;
-        usedCapital += 2;
-      } else {
-        newInvestedStats[statKey] += 1;
-        usedCapital += 3;
-      }
-    }
-    // life
-    if (statKey == "life") {
-      if (newInvestedStats.life < 1000) {
-        newInvestedStats.life += 4;
-        usedCapital++;
-      } else if (newInvestedStats.life < 2000) {
-        newInvestedStats.life += 3;
-        usedCapital++;
-      } else {
-        newInvestedStats.life += 2;
-        usedCapital++;
-      }
-    }
-    // frequency
-    if (statKey == "frequency") {
-      newInvestedStats.frequency += 1;
-      usedCapital++;
-    }
-    // cores & ram
-    if (statKey == "cores" || statKey == "ram") {
-      newInvestedStats[statKey] += 1;
-      if (newInvestedStats[statKey] == 1) {
-        usedCapital += 20;
-      } else {
-        let cost = (newInvestedStats[statKey] + 1) * 10;
+    const { totalCost, totalIncrease } = calculateCapitalCostAndStatsIncrease(
+      statKey,
+      newInvestedStats[statKey],
+      newInvestedStats[statKey] + 1
+    );
 
-        if (cost > 100) {
-          cost = 100;
-        }
-        usedCapital += cost;
-      }
-    }
-    // tp
-    if (statKey == "tp") {
-      newInvestedStats.tp += 1;
-      if (newInvestedStats.tp == 1) {
-        usedCapital += 30;
-      } else {
-        let cost = 30 + (newInvestedStats.tp - 1) * 5;
-
-        if (cost > 100) {
-          cost = 100;
-        }
-        usedCapital += cost;
-      }
-    }
-    // mp
-    if (statKey == "mp") {
-      newInvestedStats.mp += 1;
-      if (newInvestedStats.mp == 1) {
-        usedCapital += 20;
-      } else {
-        let cost = 20 + (newInvestedStats.mp - 1) * 20;
-
-        if (cost > 180) {
-          cost = 180;
-        }
-        usedCapital += cost;
-      }
-    }
+    newInvestedStats[statKey] += totalIncrease;
+    usedCapital += totalCost;
   }
 
   return {
