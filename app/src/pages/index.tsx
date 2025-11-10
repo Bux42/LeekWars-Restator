@@ -18,6 +18,7 @@ import { exportBuild } from "@/lib/export/ExportHelpers";
 import { indexStyles } from "../styles/home.styles";
 import RestatorContext from "@/contexts/RestatorContext";
 import { getItemLevels } from "@/lib/items/ItemLevelsHelpers";
+import { Analytics } from "@vercel/analytics/next";
 
 const itemLevels = getItemLevels();
 
@@ -161,6 +162,7 @@ export default function Home() {
           property="og:url"
           content="https://leek-wars-restator.vercel.app/"
         ></meta>
+        <Analytics />
       </Head>
       <div
         style={indexStyles.container}
