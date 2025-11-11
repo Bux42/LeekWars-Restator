@@ -162,12 +162,12 @@ export default function Home() {
           property="og:url"
           content="https://leek-wars-restator.vercel.app/"
         ></meta>
-        <Analytics />
       </Head>
       <div
         style={indexStyles.container}
         className={`${geistSans.variable} ${geistMono.variable}`}
       >
+        <Analytics />
         <a
           style={indexStyles.githubLink}
           target="_blank"
