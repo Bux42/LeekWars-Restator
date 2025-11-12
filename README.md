@@ -29,3 +29,7 @@ It is still a work in progress
 - Handle available components slot count (with level + components that removes X slots?)
 
 - Export leek for leek-wars-generator json entity scenario ✅
+
+## Discord
+
+Join the **Leek Wars Tools** [Discord](https://discord.gg/Py6EaDhQE5)
