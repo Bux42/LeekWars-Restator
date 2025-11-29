@@ -55,7 +55,7 @@ const geistMono = Geist_Mono({
 });
 
 export default function Home() {
-  const [level, setLevel] = useState<number>(1);
+  const [level, setLevel] = useState<number>(301);
   const [investedStats, setInvestedStats] = useState<EntityStats>(EMPTY_STATS);
   const [investedCapital, setInvestedCapital] = useState<number>(0);
 
