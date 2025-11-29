@@ -5,11 +5,8 @@ import { calculateCastableEffect } from "@/lib/effects/EffectsHelpers";
 import { Castable } from "@/types/Castable";
 import { castableCardStyles, hoverEffects } from "./CastableCard.styles";
 import CastableEffectCard from "./castable-effect-card/CastableEffectCard";
-import { getItemLevels } from "@/lib/items/ItemLevelsHelpers";
 import RestatorContext from "@/contexts/RestatorContext";
 import ItemLevelBadge from "@/components/item-level/ItemLevel";
-
-const itemLevels = getItemLevels();
 
 export default function CastableCard({
   totalStats,

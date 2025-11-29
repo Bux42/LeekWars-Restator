@@ -68,4 +68,9 @@ export const EffectIdToStatMap: { [key: number]: keyof EntityStats } = {
   [TYPE_DAMAGE]: "strength",
   [TYPE_HEAL]: "wisdom",
   [TYPE_POISON]: "magic",
+  [TYPE_NOVA_DAMAGE]: "science",
+  [TYPE_ABSOLUTE_SHIELD]: "resistance",
+  [TYPE_RELATIVE_SHIELD]: "resistance",
+  [TYPE_BUFF_MP]: "mp",
+  [TYPE_BUFF_TP]: "tp",
 };

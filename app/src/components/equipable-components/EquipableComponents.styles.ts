@@ -8,6 +8,9 @@ export interface IEquipableComponentsStyles {
 export const equipableComponentsStyles: IEquipableComponentsStyles = {
   container: {
     width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
   },
   gridContainer: {
     width: "100%",

@@ -6,6 +6,9 @@ export interface ICastableListStyles {
 export const castableListStyles: ICastableListStyles = {
   container: {
     width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
   },
   gridContainer: {
     width: "100%",

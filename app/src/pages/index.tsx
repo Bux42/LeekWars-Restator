@@ -164,7 +164,7 @@ export default function Home() {
         ></meta>
       </Head>
       <div
-        style={indexStyles.container}
+        style={indexStyles.pageContainer}
         className={`${geistSans.variable} ${geistMono.variable}`}
       >
         <Analytics />
@@ -186,63 +186,23 @@ export default function Home() {
           style={indexStyles.exportLink}
           onClick={() => exportBuild(totalStats, selectedCastables, level)}
         />
-        <div style={indexStyles.topContainer} className="topContainers">
-          <div style={indexStyles.leftSideContainer} className="leftSide">
-            <h2>Characteristics</h2>
-            <Stats
-              baseStats={baseStats}
-              investedStats={investedStats}
-              bonusStats={bonusStats}
-              totalStats={totalStats}
-              totalCapital={totalCapital}
-              investedCapital={investedCapital}
-              level={level}
-              setLevel={setLevel}
-              onInvestedCapitalChange={onInvestedCapitalChange}
-            />
-          </div>
-          <div className="rightSide" style={indexStyles.rightSideContainer}>
+        <div style={indexStyles.container} className="container">
+          <div style={indexStyles.topContainer} className="topContainer">
             <div
-              className="componentsChipsWeaponsContainer"
-              style={indexStyles.componentsChipsWeaponsContainer}
+              style={indexStyles.leftSideContainer}
+              className="statsContainer"
             >
-              <div
-                style={indexStyles.rightSideItemContainer}
-                className="componentsContainer"
-              >
-                <h2>Components ({equippedComponents.length} equipped) </h2>
-                <EquipableComponents
-                  equippedComponents={equippedComponents}
-                  onEquipComponent={onEquipComponent}
-                  onUnequipComponent={onUnequipComponent}
-                />
-              </div>
-              <div
-                style={indexStyles.rightSideItemContainer}
-                className="weaponsContainer"
-              >
-                <h2>Weapons</h2>
-                <CastableList
-                  totalStats={totalStats}
-                  castables={weapons}
-                  onDeselectCastable={onDeselectCastable}
-                  onSelectCastable={onSelectCastable}
-                  selectedCastables={selectedCastables}
-                />
-              </div>
-              <div
-                style={indexStyles.rightSideItemContainer}
-                className="chipsContainer"
-              >
-                <h2>Chips</h2>
-                <CastableList
-                  totalStats={totalStats}
-                  castables={chips}
-                  onDeselectCastable={onDeselectCastable}
-                  onSelectCastable={onSelectCastable}
-                  selectedCastables={selectedCastables}
-                />
-              </div>
+              <Stats
+                baseStats={baseStats}
+                investedStats={investedStats}
+                bonusStats={bonusStats}
+                totalStats={totalStats}
+                totalCapital={totalCapital}
+                investedCapital={investedCapital}
+                level={level}
+                setLevel={setLevel}
+                onInvestedCapitalChange={onInvestedCapitalChange}
+              />
             </div>
             <div
               style={indexStyles.rightSideItemContainer}
@@ -263,6 +223,50 @@ export default function Home() {
                     selected
                   />
                 ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="bottomContainer" style={indexStyles.bottomContainer}>
+            <div
+              className="componentsChipsWeaponsContainer"
+              style={indexStyles.componentsChipsWeaponsContainer}
+            >
+              <div
+                style={indexStyles.rightSideItemContainer}
+                className="componentsContainer"
+              >
+                <EquipableComponents
+                  equippedComponents={equippedComponents}
+                  onEquipComponent={onEquipComponent}
+                  onUnequipComponent={onUnequipComponent}
+                />
+              </div>
+              <div
+                style={indexStyles.rightSideItemContainer}
+                className="weaponsContainer"
+              >
+                <CastableList
+                  castablesType="weapons"
+                  totalStats={totalStats}
+                  castables={weapons}
+                  onDeselectCastable={onDeselectCastable}
+                  onSelectCastable={onSelectCastable}
+                  selectedCastables={selectedCastables}
+                />
+              </div>
+              <div
+                style={indexStyles.rightSideItemContainer}
+                className="chipsContainer"
+              >
+                <CastableList
+                  castablesType="chips"
+                  totalStats={totalStats}
+                  castables={chips}
+                  onDeselectCastable={onDeselectCastable}
+                  onSelectCastable={onSelectCastable}
+                  selectedCastables={selectedCastables}
+                />
               </div>
             </div>
           </div>

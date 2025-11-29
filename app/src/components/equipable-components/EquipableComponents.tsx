@@ -3,6 +3,10 @@ import { equipableComponentsStyles } from "./EquipableComponents.styles";
 import EquipableComponentCard from "./equipable-component-card/EquipableComponentCard";
 import { EquipableComponent } from "@/types/EquipableComponent";
 import { getItemLevels } from "@/lib/items/ItemLevelsHelpers";
+import StatFilter from "../stat-filter/StatFilter";
+import { COMPONENTS_STAT_FILTERS } from "@/constants/StatFilters.constants";
+import React from "react";
+import { IFilterStat } from "@/types/FilterStat";
 
 const itemLevels = getItemLevels();
 
@@ -27,6 +31,8 @@ export default function EquipableComponents({
   onEquipComponent: (component: EquipableComponent) => void;
   onUnequipComponent: (componentId: number) => void;
 }) {
+  const [filterStats, setFilterStats] = React.useState<IFilterStat[]>([]);
+
   const onEquipComponentClicked = (component: EquipableComponent) => {
     onEquipComponent(component);
   };
@@ -42,13 +48,56 @@ export default function EquipableComponents({
       (equippedComponents.includes(a) ? 1 : 0)
   );
 
+  // remove components that don't match the filter stats, and are not equipped
+  const filteredComponents = allComponentsSorted.filter((component) => {
+    if (equippedComponents.includes(component)) {
+      return true;
+    }
+    if (filterStats.length === 0) {
+      return true;
+    }
+
+    for (const componentStat of component.stats) {
+      for (const filterStat of filterStats) {
+        if (
+          componentStat[0] === filterStat.key &&
+          componentStat[1] > filterStat.value
+        ) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  });
+
+  const onFilterStatSelect = (filterStat: IFilterStat) => {
+    let updatedFilterStats: IFilterStat[];
+    if (filterStats.includes(filterStat)) {
+      updatedFilterStats = filterStats.filter(
+        (key: IFilterStat) => key !== filterStat
+      ) as unknown as IFilterStat[];
+    } else {
+      updatedFilterStats = [
+        ...(filterStats as unknown as IFilterStat[]),
+        filterStat,
+      ] as unknown as IFilterStat[];
+    }
+    setFilterStats(updatedFilterStats);
+  };
+
   return (
     <div style={equipableComponentsStyles.container}>
+      <h2>Components ({equippedComponents.length} equipped) </h2>
+      <StatFilter
+        onSelectStat={onFilterStatSelect}
+        allFilterStats={COMPONENTS_STAT_FILTERS}
+      />
       <div
         style={equipableComponentsStyles.gridContainer}
         className="components-grid-scrollable"
       >
-        {allComponentsSorted.map((component) => (
+        {filteredComponents.map((component) => (
           <EquipableComponentCard
             key={component.id}
             component={component}

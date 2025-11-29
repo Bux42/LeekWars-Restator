@@ -1,17 +1,18 @@
 export interface IIndexStyles {
-  container: React.CSSProperties;
+  pageContainer: React.CSSProperties;
   githubLink: React.CSSProperties;
   exportLink: React.CSSProperties;
+  container: React.CSSProperties;
   topContainer: React.CSSProperties;
   leftSideContainer: React.CSSProperties;
-  rightSideContainer: React.CSSProperties;
+  bottomContainer: React.CSSProperties;
   componentsChipsWeaponsContainer: React.CSSProperties;
   rightSideItemContainer: React.CSSProperties;
   selectedCastablesContainer: React.CSSProperties;
 }
 
 export const indexStyles: IIndexStyles = {
-  container: {
+  pageContainer: {
     display: "flex",
     padding: "20px",
     gap: "20px",
@@ -21,49 +22,46 @@ export const indexStyles: IIndexStyles = {
     position: "absolute",
     top: 10,
     right: 10,
+    zIndex: 1000,
+    cursor: "pointer",
   },
   exportLink: {
     position: "absolute",
     top: 50,
     right: 10,
     cursor: "pointer",
+    zIndex: 1000,
   },
-  topContainer: {
+  container: {
     display: "flex",
     gap: "20px",
     width: "100%",
     flexWrap: "wrap",
     justifyContent: "center",
   },
-  leftSideContainer: {
+  topContainer: {
     display: "flex",
     flexDirection: "column",
-    gap: "10px",
-    maxWidth: "40vw",
-  },
-  rightSideContainer: {
-    display: "flex",
-    gap: "10px",
-    flexWrap: "wrap",
-    flexDirection: "column",
-  },
-  componentsChipsWeaponsContainer: {
-    display: "flex",
     gap: "20px",
     flexWrap: "wrap",
-    flexDirection: "row",
   },
-  rightSideItemContainer: {
+  leftSideContainer: {},
+  bottomContainer: {
+    width: "100%",
     display: "flex",
-    flexDirection: "column",
     gap: "10px",
   },
+  componentsChipsWeaponsContainer: {
+    width: "100%",
+    display: "flex",
+    gap: "20px",
+    flexDirection: "column",
+  },
+  rightSideItemContainer: {},
   selectedCastablesContainer: {
     display: "flex",
+    flexWrap: "wrap",
     flexDirection: "row",
     gap: "10px",
-    overflowX: "auto",
-    whiteSpace: "nowrap",
-    maxWidth: "54vw",
   },
 };
