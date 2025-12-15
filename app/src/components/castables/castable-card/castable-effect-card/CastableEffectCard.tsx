@@ -1,5 +1,6 @@
 import { CastableEffect } from "@/types/CastableEffect";
 import { castableEffectCardStyles } from "./CastableEffectCard.styles";
+import CastableEffectTargetsList from "./castable-effect-targets/CastableEffectTargets";
 
 export default function CastableEffectCard({
   effect,
@@ -20,7 +21,10 @@ export default function CastableEffectCard({
         className="effectValueContainer"
         style={castableEffectCardStyles.effectValueContainer}
       >
-        {effect.min * (multiplier || 1)} - {effect.max * (multiplier || 1)}
+        {effect.min * (multiplier || 1)}
+        {effect.isPercentEffect ? "%" : ""} - {effect.max * (multiplier || 1)}
+        {effect.isPercentEffect ? "%" : ""}
+        <CastableEffectTargetsList effectTargets={effect} />
       </div>
     </div>
   );

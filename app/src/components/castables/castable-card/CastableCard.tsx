@@ -37,8 +37,10 @@ export default function CastableCard({
         castable.effects[i].type,
         castable.effects[i].value1,
         castable.effects[i].value1 + castable.effects[i].value2,
+        castable.effects[i].targets,
         castable.effects[i].turns
       );
+
       if (effect) {
         effects.push(effect);
       }
