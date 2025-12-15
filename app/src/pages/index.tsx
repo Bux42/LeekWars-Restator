@@ -65,7 +65,8 @@ export default function Home() {
     EquipableComponent[]
   >([]);
 
-  const [selectedCastables, setSelectedCastables] = useState<Castable[]>([]);
+  const [selectedWeapons, setSelectedWeapons] = useState<Castable[]>([]);
+  const [selectedChips, setSelectedChips] = useState<Castable[]>([]);
 
   const totalCapital = useMemo(() => {
     return (
@@ -135,14 +136,52 @@ export default function Home() {
   };
 
   const onSelectCastable = (castable: Castable) => {
-    setSelectedCastables((prevSelected) => [...prevSelected, castable]);
+    if (castable.type === "weapon") {
+      setSelectedWeapons((prevSelected) => [...prevSelected, castable]);
+      return;
+    }
+    if (castable.type === "chip") {
+      setSelectedChips((prevSelected) => [...prevSelected, castable]);
+      return;
+    }
   };
 
   const onDeselectCastable = (castableName: string) => {
-    setSelectedCastables((prevSelected) =>
-      prevSelected.filter((s) => s.name !== castableName)
-    );
+    if (selectedWeapons.find((c) => c.name === castableName)) {
+      setSelectedWeapons((prevSelected) =>
+        prevSelected.filter((s) => s.name !== castableName)
+      );
+      return;
+    }
+    if (selectedChips.find((c) => c.name === castableName)) {
+      setSelectedChips((prevSelected) =>
+        prevSelected.filter((s) => s.name !== castableName)
+      );
+      return;
+    }
   };
+
+  const maxWeapons = useMemo(() => {
+    if (level < 100) {
+      return 2;
+    }
+    if (level < 200) {
+      return 3;
+    }
+    return 4;
+  }, [level]);
+
+  const weaponOverflow = useMemo(() => {
+    return selectedWeapons.length > maxWeapons;
+  }, [selectedWeapons, maxWeapons]);
+
+  const maxChips = useMemo(() => {
+    return totalStats.ram;
+  }, [totalStats.ram]);
+
+  const chipOverflow = useMemo(() => {
+    return selectedChips.length > maxChips;
+  }, [selectedChips, maxChips]);
 
   return (
     <RestatorContext.Provider value={{ level }}>
@@ -184,7 +223,9 @@ export default function Home() {
           src="/assets/images/icons/save.png"
           alt="export"
           style={indexStyles.exportLink}
-          onClick={() => exportBuild(totalStats, selectedCastables, level)}
+          onClick={() =>
+            exportBuild(totalStats, selectedChips, selectedWeapons, level)
+          }
         />
         <div style={indexStyles.container} className="container">
           <div style={indexStyles.topContainer} className="topContainer">
@@ -208,12 +249,37 @@ export default function Home() {
               style={indexStyles.rightSideItemContainer}
               className="selectedCastables"
             >
-              <h2>Equipped Weapons / Chips ({selectedCastables.length})</h2>
+              <h2 style={{ color: weaponOverflow ? "red" : undefined }}>
+                Equipped Weapons ({selectedWeapons.length}/{maxWeapons})
+              </h2>
               <div
                 style={indexStyles.selectedCastablesContainer}
                 className="selectedCastablesContainer"
               >
-                {selectedCastables.map((castable) => (
+                {selectedWeapons.map((castable) => (
+                  <CastableCard
+                    key={castable.id}
+                    castable={castable}
+                    onDeselectCastable={onDeselectCastable}
+                    onSelectCastable={onSelectCastable}
+                    totalStats={totalStats}
+                    selected
+                  />
+                ))}
+              </div>
+            </div>
+            <div
+              style={indexStyles.rightSideItemContainer}
+              className="selectedCastables"
+            >
+              <h2 style={{ color: chipOverflow ? "red" : undefined }}>
+                Equipped Chips ({selectedChips.length}/{maxChips})
+              </h2>
+              <div
+                style={indexStyles.selectedCastablesContainer}
+                className="selectedCastablesContainer"
+              >
+                {selectedChips.map((castable) => (
                   <CastableCard
                     key={castable.id}
                     castable={castable}
@@ -252,7 +318,7 @@ export default function Home() {
                   castables={weapons}
                   onDeselectCastable={onDeselectCastable}
                   onSelectCastable={onSelectCastable}
-                  selectedCastables={selectedCastables}
+                  selectedCastables={selectedWeapons}
                 />
               </div>
               <div
@@ -265,7 +331,7 @@ export default function Home() {
                   castables={chips}
                   onDeselectCastable={onDeselectCastable}
                   onSelectCastable={onSelectCastable}
-                  selectedCastables={selectedCastables}
+                  selectedCastables={selectedChips}
                 />
               </div>
             </div>

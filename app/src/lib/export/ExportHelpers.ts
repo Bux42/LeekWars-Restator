@@ -3,14 +3,13 @@ import { EntityStats } from "@/types/EntityStats";
 
 const buildToJson = (
   totalStats: EntityStats,
-  castables: Castable[],
+  selectedChips: Castable[],
+  selectedWeapons: Castable[],
   level: number
 ): string => {
-  const weaponIds = castables
-    .filter((c) => c.type === "weapon")
-    .map((w) => w.item);
+  const weaponIds = selectedWeapons.map((w) => w.item);
 
-  const chipIds = castables.filter((c) => c.type === "chip").map((c) => c.id);
+  const chipIds = selectedChips.map((c) => c.id);
 
   const obj = {
     level: level,
@@ -35,10 +34,16 @@ const buildToJson = (
 
 export const exportBuild = (
   totalStats: EntityStats,
-  castables: Castable[],
+  selectedChips: Castable[],
+  selectedWeapons: Castable[],
   level: number
 ) => {
-  const buildJson = buildToJson(totalStats, castables, level);
+  const buildJson = buildToJson(
+    totalStats,
+    selectedChips,
+    selectedWeapons,
+    level
+  );
 
   const blob = new Blob([buildJson], { type: "application/json" });
   const url = URL.createObjectURL(blob);
